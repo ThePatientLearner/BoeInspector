@@ -151,3 +151,34 @@ se cae. Su configuración de rutas está en `~/.cloudflared/config.yml`.
 
 > El túnel solo transporta; si el monolito no está escuchando en el 3001,
 > `api.agenteboe.com` devuelve 502.
+
+## Arranque automático (macOS)
+
+Dos LaunchAgents en `~/Library/LaunchAgents/` levantan el servicio al iniciar
+sesión y lo relanzan si se cae:
+
+| Agente | Qué hace |
+|---|---|
+| `com.agenteboe.tunnel` | El túnel Cloudflare (`api.agenteboe.com`) |
+| `com.agenteboe.monolith` | El monolito, vía `scripts/start-service.sh` |
+
+`start-service.sh` resuelve la dependencia que el monolito no puede resolver
+solo: espera a que Docker Desktop arranque y a que Postgres acepte conexiones
+antes de ceder el proceso al monolito. Si algo no está listo sale con error y
+launchd reintenta a los 30 s.
+
+```bash
+launchctl list | grep agenteboe                  # ¿corriendo? (2ª col = 0)
+tail -f ~/Library/Logs/agenteboe-monolith.log
+launchctl unload ~/Library/LaunchAgents/com.agenteboe.monolith.plist   # parar
+launchctl load   ~/Library/LaunchAgents/com.agenteboe.monolith.plist   # arrancar
+```
+
+> **El PATH de launchd es mínimo.** El `.plist` declara `/usr/local/bin`
+> explícitamente porque ahí vive el CLI de Docker; sin él, `docker info` falla
+> por "command not found" y el arranque lo confunde con "Docker apagado".
+
+> **Los días sin encender no se recuperan solos.** `node-cron` vive dentro del
+> proceso: si el Mac está apagado a las 08:30, ese boletín no se ingiere y no
+> hay reintento posterior. Para recuperarlo: `npm run ingest -- 2026-08-10`
+> (ojo: notifica a los canales).
