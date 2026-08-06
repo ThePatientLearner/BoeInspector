@@ -12,14 +12,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <body>
         <header className="site-header">
-          <a href="/" className="site-title">
-            BOE Inspector
-          </a>
-          {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
-          <p className="site-disclaimer">
-            Proyecto independiente y gratuito. Los resúmenes los genera una IA y no sustituyen al
-            texto oficial del BOE.
-          </p>
+          <div className="header-inner">
+            <a href="/" className="site-title">
+              BOE <span>Inspector</span>
+            </a>
+            {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
+            <p className="site-disclaimer">
+              Proyecto independiente y gratuito. Los resúmenes los genera una IA y no sustituyen al
+              texto oficial del BOE.
+            </p>
+          </div>
+          <div className="flag-ribbon" aria-hidden="true" />
         </header>
         <main className="site-main">{children}</main>
         <footer className="site-footer">

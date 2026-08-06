@@ -1,9 +1,25 @@
+/*
+ * BOE Inspector — tema "sala de investigación".
+ * Paleta tomada del emblema (public/emblema.jpg): azul marino profundo,
+ * dorado metálico y los colores de la bandera como acento puntual.
+ * Sin fuentes ni recursos externos: todo carga de local.
+ */
+
 :root {
-  --ink: #1c1c1c;
-  --paper: #fbfaf7;
-  --accent: #8a4c22;
-  --muted: #6b6b6b;
-  --line: #e3e0d8;
+  --bg: #0a111f;
+  --panel: #101c31;
+  --panel-2: #16263f;
+  --ink: #ebe4d3;
+  --muted: #9aa4b8;
+  --muted-warm: #a89a7c;
+  --gold: #c9a86a;
+  --gold-bright: #e7ce99;
+  --gold-dim: rgba(201, 168, 106, 0.35);
+  --line: rgba(201, 168, 106, 0.22);
+  --red: #b3222d;
+  --red-soft: #e05561;
+  --yellow: #f0c22e;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
 }
 
 * {
@@ -14,79 +30,402 @@ body {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   color: var(--ink);
-  background: var(--paper);
-  line-height: 1.6;
+  background:
+    radial-gradient(1100px 520px at 50% -10%, rgba(38, 58, 94, 0.55), transparent 65%),
+    var(--bg);
+  line-height: 1.65;
 }
 
+::selection {
+  background: var(--gold);
+  color: #14100a;
+}
+
+a {
+  color: var(--gold-bright);
+}
+
+/* ── Cabecera ──────────────────────────────────────────────────── */
+
 .site-header {
-  border-bottom: 3px double var(--line);
-  padding: 1.5rem 1rem 1rem;
-  max-width: 52rem;
+  background: linear-gradient(180deg, #0e1930, #0a111f);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  max-width: 56rem;
   margin: 0 auto;
+  padding: 1.2rem 1rem 0.9rem;
 }
 
 .site-title {
-  font-size: 1.6rem;
+  font-size: clamp(1.3rem, 3.5vw, 1.7rem);
   font-weight: 700;
-  color: var(--ink);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
   text-decoration: none;
+}
+
+.site-title span {
+  color: var(--ink);
 }
 
 .site-disclaimer {
   color: var(--muted);
-  font-size: 0.85rem;
-  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  margin: 0.4rem 0 0;
 }
+
+/* Cinta con los colores de la bandera, como la del emblema */
+.flag-ribbon {
+  height: 4px;
+  background: linear-gradient(90deg, var(--red), var(--yellow) 35% 65%, var(--red));
+  opacity: 0.85;
+}
+
+/* ── Contenido ─────────────────────────────────────────────────── */
 
 .site-main {
-  max-width: 52rem;
+  max-width: 56rem;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: 1.4rem 1rem 3.5rem;
 }
 
-.site-footer {
-  border-top: 1px solid var(--line);
-  max-width: 52rem;
-  margin: 0 auto;
-  padding: 1.25rem 1rem 2.5rem;
+/* Héroe con el emblema */
+.hero {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin: 0.4rem 0 2rem;
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 42vw, 430px);
+  object-fit: cover;
+}
+
+/* Degradado para fundir la foto con el fondo y dar sitio al titular */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 17, 31, 0) 45%, rgba(10, 17, 31, 0.94));
+}
+
+.hero-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 1rem 1.4rem 1.15rem;
+}
+
+.hero-caption h1 {
+  margin: 0;
+  font-size: clamp(1.3rem, 3.6vw, 2rem);
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+}
+
+.hero-caption p {
+  margin: 0.35rem 0 0;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: clamp(0.88rem, 2.4vw, 1rem);
+  max-width: 38rem;
 }
 
-.site-footer a {
-  color: var(--accent);
-}
-
+/* Separador de día, estilo pestaña de expediente */
 .day-heading {
-  font-size: 1.1rem;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 2.4rem 0 1.1rem;
+  font-size: clamp(0.92rem, 2.4vw, 1.05rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
 }
 
+.day-heading::before,
+.day-heading::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+}
+
+.day-heading::before {
+  background: linear-gradient(90deg, transparent, var(--gold-dim));
+}
+
+.day-heading::after {
+  background: linear-gradient(90deg, var(--gold-dim), transparent);
+}
+
+/* Fichas de disposición, estilo carpeta de caso */
 .entry-card {
-  margin: 1.1rem 0;
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 10px;
+  padding: 1.05rem 1.2rem;
+  margin: 0 0 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--gold-bright);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.42);
+}
+
+.case-label {
+  margin: 0 0 0.45rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-warm);
 }
 
 .entry-title {
-  font-size: 1rem;
   margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.45;
 }
 
 .entry-title a {
   color: var(--ink);
+  text-decoration: none;
+}
+
+.entry-title a:hover {
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-dim);
 }
 
 .entry-meta {
   color: var(--muted);
   font-size: 0.8rem;
-  margin: 0.15rem 0;
-}
-
-.entry-phrase {
   margin: 0.3rem 0 0;
 }
 
+.entry-phrase {
+  margin: 0.7rem 0 0;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--line);
+  color: #d9d2c0;
+}
+
+.badge-pending {
+  display: inline-block;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  border: 1px solid rgba(240, 194, 46, 0.4);
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+}
+
 .empty-state {
+  margin: 2rem 0;
+  padding: 2.4rem 1.2rem;
+  text-align: center;
   color: var(--muted);
   font-style: italic;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+}
+
+/* ── Página de disposición (el "dossier") ──────────────────────── */
+
+.dossier {
+  background: linear-gradient(165deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(1.1rem, 3.5vw, 2rem);
+  box-shadow: var(--shadow);
+}
+
+.dossier-title {
+  margin: 0.2rem 0 0;
+  font-size: clamp(1.12rem, 3vw, 1.45rem);
+  line-height: 1.42;
+}
+
+.official-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 1.2rem 0 1.7rem;
+}
+
+.btn-official {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  color: #171106;
+  font-weight: 700;
+  padding: 0.65rem 1.15rem;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(201, 168, 106, 0.25);
+}
+
+.btn-official:hover {
+  filter: brightness(1.07);
+}
+
+.btn-secondary {
+  display: inline-block;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-bright);
+  padding: 0.6rem 1.05rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+}
+
+.summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: 1.2rem;
+}
+
+.summary-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Sello girado, obligatorio y decorativo a la vez: deja claro que es IA */
+.stamp {
+  display: inline-block;
+  transform: rotate(-3deg);
+  border: 2px solid rgba(179, 34, 45, 0.7);
+  border-radius: 6px;
+  padding: 0.28rem 0.65rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red-soft);
+}
+
+.summary-lead {
+  margin: 0.9rem 0 0;
+  color: var(--gold-bright);
+  font-style: italic;
+}
+
+.summary ul {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+}
+
+.summary li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin: 0.55rem 0;
+}
+
+.summary li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  top: 0.42rem;
+  font-size: 0.62rem;
+  color: var(--gold);
+}
+
+.legal-note {
+  margin-top: 1.8rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* ── Pie ───────────────────────────────────────────────────────── */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.4rem 1rem 2.6rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.site-footer a {
+  color: var(--gold-bright);
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  /* En móvil el titular ya no se superpone al emblema (chocaba con la zona
+     brillante del centro): pasa a un bloque propio bajo la imagen. */
+  .hero img {
+    height: 210px;
+  }
+
+  .hero::after {
+    content: none;
+  }
+
+  .hero-caption {
+    position: static;
+    padding: 0.85rem 1rem 1rem;
+    background: linear-gradient(180deg, #0e1930, var(--panel));
+    border-top: 1px solid var(--line);
+  }
+
+  .official-links {
+    flex-direction: column;
+  }
+
+  .official-links a {
+    text-align: center;
+  }
+
+  .summary-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .stamp {
+    align-self: flex-end;
+  }
+
+  .entry-card {
+    padding: 0.9rem 0.95rem;
+  }
+
+  .hero-caption {
+    padding: 0.8rem 1rem 0.9rem;
+  }
 }
