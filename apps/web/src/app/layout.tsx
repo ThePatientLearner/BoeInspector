@@ -7,10 +7,36 @@ export const metadata: Metadata = {
     "Resúmenes diarios de las disposiciones generales del BOE, generados por IA, con enlace al texto oficial. Servicio gratuito e independiente, no vinculado al BOE.",
 };
 
+/**
+ * Olas del fondo. Tres capas del mismo trazo periódico (período 300 en un
+ * viewBox de 1200) desplazándose en bucle: al trasladar el 50% exacto la
+ * onda encaja consigo misma y el bucle es invisible. Los colores y
+ * velocidades los pone el CSS (.waves).
+ */
+const WAVE_PATH =
+  "M0,100 Q75,60 150,100 T300,100 T450,100 T600,100 T750,100 T900,100 T1050,100 T1200,100 V200 H0 Z";
+
+function WaveBackground() {
+  return (
+    <div className="waves" aria-hidden="true">
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <path d={WAVE_PATH} fill="#142238" />
+      </svg>
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <path d={WAVE_PATH} fill="#1b2f4d" />
+      </svg>
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <path d={WAVE_PATH} fill="rgba(201, 168, 106, 0.08)" />
+      </svg>
+    </div>
+  );
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <body>
+        <WaveBackground />
         <header className="site-header">
           <div className="header-inner">
             <a href="/" className="site-title">

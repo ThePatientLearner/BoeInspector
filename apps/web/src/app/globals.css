@@ -45,6 +45,63 @@ a {
   color: var(--gold-bright);
 }
 
+/* ── Olas del fondo ────────────────────────────────────────────── */
+/* Tres capas de la misma onda a distinta velocidad y sentido. Solo se
+   anima `transform` (GPU): coste mínimo incluso en móvil. */
+
+.waves {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.waves svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  animation: wave-drift 38s linear infinite;
+}
+
+.waves svg:nth-child(1) {
+  opacity: 0.85;
+}
+
+.waves svg:nth-child(2) {
+  animation-duration: 26s;
+  animation-direction: reverse;
+  height: 76%;
+  opacity: 0.75;
+}
+
+.waves svg:nth-child(3) {
+  animation-duration: 52s;
+  height: 55%;
+}
+
+/* La onda es periódica cada 50% del ancho: al llegar ahí, el fotograma
+   coincide con el inicial y el bucle no se nota. */
+@keyframes wave-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waves svg {
+    animation: none;
+  }
+}
+
 /* ── Cabecera ──────────────────────────────────────────────────── */
 
 .site-header {
