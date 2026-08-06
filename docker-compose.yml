@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: boe
+      POSTGRES_PASSWORD: boe
+      POSTGRES_DB: boe_inspector
+    volumes:
+      - boe_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boe -d boe_inspector"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: apps/monolith/Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://boe:boe@db:5432/boe_inspector
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      API_URL: http://app:3001
+    depends_on:
+      - app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  # Volumen con nombre: los datos viven FUERA del contenedor, así que
+  # `docker compose down` o reconstruir la imagen no los borra.
+  # Para mudarlo a otro servidor no se copia el volumen a mano: se hace
+  # un volcado lógico y se restaura allí (ver scripts/backup-db.sh).
+  boe_pgdata:
+    name: boe_inspector_pgdata

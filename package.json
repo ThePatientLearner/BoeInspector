@@ -1,0 +1,23 @@
+{
+  "name": "boe-inspector",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Res\u00famenes diarios del BOE (Secci\u00f3n I) con IA: web + Telegram + Discord. Servicio gratuito e independiente, no vinculado al BOE.",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @boe-inspector/monolith",
+    "dev:web": "npm run dev --workspace @boe-inspector/web",
+    "probe": "npm run probe --workspace @boe-inspector/monolith",
+    "ingest": "npm run ingest --workspace @boe-inspector/monolith",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspace @boe-inspector/monolith",
+    "typecheck": "npm run typecheck --workspace @boe-inspector/monolith",
+    "check:boundaries": "npm run check:boundaries --workspace @boe-inspector/monolith",
+    "notify:test": "npm run notify:test --workspace @boe-inspector/monolith"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
