@@ -132,3 +132,22 @@ Tres contenedores: `app` (monolito), `web` (Next.js standalone) y
 - [ ] Fase 4 — Notificadores en producción
 - [ ] Fase 5 — Cron con reintentos, alertas de fallo, backup
 - [ ] Fase 6 — WhatsApp (Cloud API) y extras
+
+## Túnel Cloudflare (backend en el Mac)
+
+La API vive en el Mac y se publica en `https://api.agenteboe.com` mediante un
+túnel con nombre. No hace falta abrir puertos en el router: `cloudflared`
+establece la conexión de salida.
+
+```bash
+launchctl list | grep agenteboe     # ¿está corriendo?
+curl https://api.agenteboe.com/health
+tail -f ~/Library/Logs/agenteboe-tunnel.log
+```
+
+El túnel arranca solo al iniciar sesión (LaunchAgent
+`~/Library/LaunchAgents/com.agenteboe.tunnel.plist`) y launchd lo relanza si
+se cae. Su configuración de rutas está en `~/.cloudflared/config.yml`.
+
+> El túnel solo transporta; si el monolito no está escuchando en el 3001,
+> `api.agenteboe.com` devuelve 502.
