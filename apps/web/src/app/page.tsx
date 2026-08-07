@@ -1,4 +1,5 @@
 import { EntryBrowser } from "@/components/EntryBrowser";
+import { NotifyButton } from "@/components/NotifyButton";
 import { fetchDays } from "@/lib/api";
 
 export default async function HomePage() {
@@ -15,6 +16,9 @@ export default async function HomePage() {
           width={1920}
           height={1047}
         />
+        {/* Botón sobre el emblema: anclado a la esquina superior derecha del
+            hero en escritorio y, en móvil, a la de la pantalla (ver CSS). */}
+        <NotifyButton />
         <div className="hero-caption">
           <h1>El BOE, bajo la lupa cada mañana</h1>
           <p>

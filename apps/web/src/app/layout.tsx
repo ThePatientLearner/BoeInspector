@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { NotifyButton } from "@/components/NotifyButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,10 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               límites de responsabilidad, marco de reutilización), y cobrar
               obligaría a rehacer las tres cosas. Está en el commit 4a68870 por
               si algún día se retoma. */}
-          <NotifyButton />
           <div className="header-inner">
             <a href="/" className="site-title">
-              BOE <span>Inspector</span>
+              Agente<span>BOE</span>.com
             </a>
             {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
             <p className="site-disclaimer">
@@ -59,6 +57,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
         <main className="site-main">{children}</main>
         <footer className="site-footer">
+          {/* El lema del proyecto. */}
+          <blockquote className="site-motto">
+            <p>«La información es la moneda de la democracia»</p>
+            <cite>Thomas Jefferson</cite>
+          </blockquote>
           <p>
             Basado en datos de la{" "}
             <a href="https://www.boe.es" rel="noopener noreferrer">
