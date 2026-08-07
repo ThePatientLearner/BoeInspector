@@ -1329,8 +1329,14 @@ a {
     padding: 0.9rem 0.95rem;
   }
 
+  /* En escritorio el titular y la cita quedan a la izquierda, sobre el
+     emblema; apilados debajo de la imagen en móvil, centrados queda más
+     equilibrado que un bloque de texto pegado al borde. `text-align` se
+     hereda, así que centra también el h1 y la cita de Jefferson sin
+     tocarlos por separado. */
   .hero-caption {
     padding: 0.8rem 1rem 0.9rem;
+    text-align: center;
   }
 
   /* Descargar pasa a ocupar su propia línea: en 375 px no cabe al lado
