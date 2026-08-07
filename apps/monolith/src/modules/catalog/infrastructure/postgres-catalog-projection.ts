@@ -5,7 +5,12 @@ import type { Logger } from "../../../shared/logger/logger.js";
 import type { EventBus } from "../../../shared/event-bus/event-bus.js";
 import type { EntryIngested } from "../../ingestion/index.js";
 import type { SummaryGenerated } from "../../summarization/index.js";
-import type { CatalogDayView, CatalogEntryView, CatalogReadModel } from "../application/queries.js";
+import type {
+  CatalogDayView,
+  CatalogEntryView,
+  CatalogReadModel,
+  CatalogReferenceView,
+} from "../application/queries.js";
 import { catalogEntries } from "./schema.js";
 
 type CatalogRow = typeof catalogEntries.$inferSelect;
@@ -125,6 +130,25 @@ export class PostgresCatalogProjection implements CatalogReadModel {
 
     const row = rows[0];
     return row ? toView(row) : null;
+  }
+
+  /**
+   * Solo id y fecha: enumerar el archivo entero trayendo también resúmenes y
+   * viñetas sería mover megabytes para construir una lista de URLs.
+   */
+  async listReferences(): Promise<CatalogReferenceView[]> {
+    const rows = await this.db
+      .select({
+        id: catalogEntries.id,
+        lastOfficialUpdateAt: catalogEntries.lastOfficialUpdateAt,
+      })
+      .from(catalogEntries)
+      .orderBy(desc(catalogEntries.publicationDate), catalogEntries.id);
+
+    return rows.map((row) => ({
+      id: row.id,
+      lastOfficialUpdateAt: toIsoDate(row.lastOfficialUpdateAt),
+    }));
   }
 
   /**

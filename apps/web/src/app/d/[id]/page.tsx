@@ -1,7 +1,39 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ImpactMeter } from "@/components/ImpactMeter";
 import { fetchEntry } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+
+/**
+ * Título y descripción propios de cada disposición.
+ *
+ * Sin esto todas las fichas heredaban el título del layout y eran
+ * indistinguibles entre sí para un buscador, desperdiciando lo único que
+ * este sitio tiene de valor: contenido nuevo y distinto cada día. El título
+ * llano es además, casi literalmente, lo que alguien teclearía al buscar.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const entry = await fetchEntry(id);
+  if (!entry) return { title: "Disposición no encontrada — Agente BOE" };
+
+  const title = entry.plainTitle ?? entry.title;
+  const description =
+    entry.shortPhrase ??
+    `${entry.department}. Disposición ${entry.id} publicada en el BOE el ${formatDate(entry.publicationDate)}.`;
+  const url = `https://agenteboe.com/d/${entry.id}`;
+
+  return {
+    title: `${title} — Agente BOE`,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, type: "article" },
+  };
+}
 
 export default async function EntryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -29,6 +29,17 @@ export interface CatalogDayView {
 }
 
 /**
+ * Referencia mínima a una disposición: lo justo para enumerar el archivo
+ * entero sin arrastrar los resúmenes. Existe porque la portada solo muestra
+ * los últimos días y, sin una lista completa, las disposiciones antiguas
+ * quedan sin ningún enlace que las alcance.
+ */
+export interface CatalogReferenceView {
+  readonly id: string;
+  readonly lastOfficialUpdateAt: IsoDate;
+}
+
+/**
  * Puerto de lectura del catálogo. `catalog` es el único módulo que la API
  * consulta; se alimenta de los eventos de los demás (CQRS ligero).
  */
@@ -36,4 +47,6 @@ export interface CatalogReadModel {
   listDays(limit: number): Promise<CatalogDayView[]>;
   getDay(date: IsoDate): Promise<CatalogDayView | null>;
   getEntry(id: string): Promise<CatalogEntryView | null>;
+  /** Todas las disposiciones publicadas, de la más reciente a la más antigua. */
+  listReferences(): Promise<CatalogReferenceView[]>;
 }

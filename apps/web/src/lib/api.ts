@@ -35,6 +35,22 @@ export async function fetchDays(): Promise<CatalogDay[] | null> {
   }
 }
 
+/** Referencia mínima de cada disposición del archivo; la usa el sitemap. */
+export interface CatalogReference {
+  id: string;
+  lastOfficialUpdateAt: string;
+}
+
+export async function fetchAllReferences(): Promise<CatalogReference[]> {
+  try {
+    const response = await fetch(`${API_URL}/api/entries`, { next: { revalidate: 3600 } });
+    if (!response.ok) return [];
+    return (await response.json()) as CatalogReference[];
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchEntry(id: string): Promise<CatalogEntry | null> {
   try {
     const response = await fetch(`${API_URL}/api/entries/${encodeURIComponent(id)}`, {

@@ -16,6 +16,13 @@ export function buildServer(catalog: CatalogReadModel, logger: Logger) {
     return catalog.listDays(15);
   });
 
+  // Archivo completo, sin el límite de 15 días de la portada: lo consume el
+  // sitemap. Sin esto, las disposiciones antiguas no tienen ningún enlace
+  // que las alcance y dejan de ser accesibles para los buscadores.
+  app.get("/api/entries", async () => {
+    return catalog.listReferences();
+  });
+
   app.get<{ Params: { date: string } }>("/api/days/:date", async (request, reply) => {
     const date = isoDate(request.params.date);
     if (!date.ok) {

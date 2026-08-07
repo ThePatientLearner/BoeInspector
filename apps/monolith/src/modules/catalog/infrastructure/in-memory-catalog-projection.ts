@@ -2,7 +2,12 @@ import type { IsoDate } from "../../../shared/domain/iso-date.js";
 import type { EventBus } from "../../../shared/event-bus/event-bus.js";
 import type { EntryIngested } from "../../ingestion/index.js";
 import type { SummaryGenerated } from "../../summarization/index.js";
-import type { CatalogDayView, CatalogEntryView, CatalogReadModel } from "../application/queries.js";
+import type {
+  CatalogDayView,
+  CatalogEntryView,
+  CatalogReadModel,
+  CatalogReferenceView,
+} from "../application/queries.js";
 
 /**
  * Proyección en memoria, solo para tests. En producción se usa
@@ -66,5 +71,17 @@ export class InMemoryCatalogProjection implements CatalogReadModel {
 
   async getEntry(id: string): Promise<CatalogEntryView | null> {
     return this.entries.get(id) ?? null;
+  }
+
+  async listReferences(): Promise<CatalogReferenceView[]> {
+    return [...this.entries.values()]
+      .sort((a, b) =>
+        a.publicationDate === b.publicationDate
+          ? a.id.localeCompare(b.id)
+          : a.publicationDate < b.publicationDate
+            ? 1
+            : -1,
+      )
+      .map((entry) => ({ id: entry.id, lastOfficialUpdateAt: entry.lastOfficialUpdateAt }));
   }
 }

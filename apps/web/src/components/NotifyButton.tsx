@@ -6,6 +6,20 @@ const TELEGRAM_URL = "https://t.me/EscudoFinanciero";
 const DISCORD_URL = "https://discord.gg/EEq8CtKQqu";
 
 /**
+ * Marca de "ya se le ofreció". `localStorage` y no una cookie de sesión: la
+ * oferta debe hacerse una vez y no repetirse en visitas posteriores.
+ */
+const SEEN_KEY = "agenteboe:notify-offered";
+
+/**
+ * 9 segundos. Tres o cuatro es tiempo suficiente para que la página cargue,
+ * pero no para que nadie haya leído todavía un resumen: pedir la suscripción
+ * antes de haber dado nada es lo que hace que la gente cierre por reflejo.
+ * A los nueve ya ha visto de qué va el sitio y la oferta tiene sentido.
+ */
+const AUTO_OPEN_MS = 9000;
+
+/**
  * Botón "Notificar gratis" en la cabecera. Al pulsarlo abre una ventana con
  * dos accesos al canal de Telegram y al servidor de Discord donde se
  * publican los avisos.
@@ -17,6 +31,33 @@ const DISCORD_URL = "https://discord.gg/EEq8CtKQqu";
 export function NotifyButton() {
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
+
+  // Apertura automática, solo en la primera visita.
+  useEffect(() => {
+    let seen: string | null = null;
+    try {
+      seen = window.localStorage.getItem(SEEN_KEY);
+    } catch {
+      // Navegación privada o almacenamiento bloqueado: sin forma de recordar
+      // si ya se ofreció, no se abre sola. Es preferible no ofrecerla nunca
+      // a repetirla en cada carga de página.
+      return;
+    }
+    if (seen) return;
+
+    const timer = setTimeout(() => {
+      // Se marca al abrir, no al cerrar: si alguien se va sin cerrarla,
+      // tampoco hay que volver a mostrársela la próxima vez.
+      try {
+        window.localStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        /* no se pudo guardar; se abre igualmente esta vez */
+      }
+      setOpen(true);
+    }, AUTO_OPEN_MS);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
