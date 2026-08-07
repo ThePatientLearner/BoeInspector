@@ -138,6 +138,15 @@ a {
   text-align: center;
 }
 
+/* "gratuito" es el dato que más importa de esta frase: se destaca en el
+   amarillo de la bandera (ya presente en .flag-ribbon y en los impactos
+   3/5), no en el dorado del título, para que no compita con la marca. */
+.disclaimer-highlight {
+  color: var(--yellow);
+  font-size: 1.12em;
+  font-weight: 700;
+}
+
 /* ── Botón "Notificar gratis" + modal ─────────────────────────── */
 
 /* En escritorio vive sobre el emblema (.hero ya es el contexto relativo).

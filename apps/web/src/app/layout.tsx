@@ -49,8 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
             <p className="site-disclaimer">
-              Proyecto independiente y gratuito. Los resúmenes los genera una IA y no sustituyen al
-              texto oficial del BOE.
+              Proyecto independiente y <strong className="disclaimer-highlight">gratuito</strong>.
+              Los resúmenes los genera una IA y no sustituyen al texto oficial del BOE.
             </p>
           </div>
           <div className="flag-ribbon" aria-hidden="true" />
