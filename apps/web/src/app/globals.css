@@ -1366,8 +1366,16 @@ a {
     top: auto;
     bottom: 1.3rem;
     left: 1.3rem;
+    /* Mismo patrón que ".notify-trigger": icono arriba, texto debajo. No es
+       solo estética simétrica — así la altura sale de un segundo renglón
+       real, en vez de un padding vertical enorme que quedaría vacío
+       alrededor de una sola línea. */
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
     padding: 0.4rem 0.7rem;
     font-size: 0.72rem;
+    text-align: center;
   }
 
   .countdown-clock,
