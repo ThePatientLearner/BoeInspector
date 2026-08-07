@@ -1,5 +1,5 @@
 import { err, ok, type Result } from "../../../shared/domain/result.js";
-import type { NotificationMessage, Notifier } from "../domain/notifier.js";
+import { impactDots, type NotificationMessage, type Notifier } from "../domain/notifier.js";
 
 /**
  * Publica en un canal de Telegram vía Bot API. El bot debe ser
@@ -16,6 +16,7 @@ export class TelegramNotifier implements Notifier {
   async send(message: NotificationMessage): Promise<Result<void>> {
     const text = [
       `<b>${escapeHtml(message.title)}</b>`,
+      `<code>${impactDots(message.impact)}</code> impacto ${message.impact}/5`,
       "",
       escapeHtml(message.shortPhrase),
       "",

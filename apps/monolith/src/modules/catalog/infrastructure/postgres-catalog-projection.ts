@@ -60,8 +60,10 @@ export class PostgresCatalogProjection implements CatalogReadModel {
       const updated = await this.db
         .update(catalogEntries)
         .set({
+          plainTitle: p.plainTitle,
           shortPhrase: p.shortPhrase,
           bulletPoints: [...p.bulletPoints],
+          impact: p.impact,
           model: p.model,
           updatedAt: new Date(),
         })
@@ -141,10 +143,12 @@ function toView(row: CatalogRow): CatalogEntryView {
     publicationDate: toIsoDate(row.publicationDate),
     department: row.department,
     title: row.title,
+    plainTitle: row.plainTitle,
     officialHtmlUrl: row.officialHtmlUrl,
     officialPdfUrl: row.officialPdfUrl,
     shortPhrase: row.shortPhrase,
     bulletPoints: row.bulletPoints,
+    impact: row.impact,
     model: row.model,
     lastOfficialUpdateAt: toIsoDate(row.lastOfficialUpdateAt),
   };

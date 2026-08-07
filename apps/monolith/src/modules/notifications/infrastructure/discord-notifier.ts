@@ -1,5 +1,5 @@
 import { err, ok, type Result } from "../../../shared/domain/result.js";
-import type { NotificationMessage, Notifier } from "../domain/notifier.js";
+import { impactDots, type NotificationMessage, type Notifier } from "../domain/notifier.js";
 
 /** Publica en un canal de Discord vía webhook (no requiere bot). */
 export class DiscordNotifier implements Notifier {
@@ -10,6 +10,7 @@ export class DiscordNotifier implements Notifier {
   async send(message: NotificationMessage): Promise<Result<void>> {
     const content = [
       `**${message.title}**`,
+      `\`${impactDots(message.impact)}\` impacto ${message.impact}/5`,
       "",
       message.shortPhrase,
       "",

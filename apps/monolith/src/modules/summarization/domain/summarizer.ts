@@ -1,8 +1,11 @@
 import type { Result } from "../../../shared/domain/result.js";
+import type { ImpactLevel } from "./summary.js";
 
 export interface SummaryDraft {
+  readonly plainTitle: string;
   readonly shortPhrase: string;
   readonly bulletPoints: readonly string[];
+  readonly impact: ImpactLevel;
   readonly model: string;
 }
 

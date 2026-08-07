@@ -5,11 +5,19 @@ export interface CatalogEntryView {
   readonly id: string;
   readonly publicationDate: IsoDate;
   readonly department: string;
+  /** Título oficial del BOE, literal. Se muestra dentro, junto al enlace. */
   readonly title: string;
+  /**
+   * Título en lenguaje llano. Es el que encabeza cada ficha; nulo mientras
+   * la IA no ha resumido todavía, y entonces la web cae al oficial.
+   */
+  readonly plainTitle: string | null;
   readonly officialHtmlUrl: string;
   readonly officialPdfUrl: string;
   readonly shortPhrase: string | null;
   readonly bulletPoints: readonly string[] | null;
+  /** Impacto en el ciudadano, 1-5. Nulo hasta que hay resumen. */
+  readonly impact: number | null;
   readonly model: string | null;
   /** Obligatorio mostrarla (condiciones de reutilización del BOE). */
   readonly lastOfficialUpdateAt: IsoDate;

@@ -40,8 +40,10 @@ export class SummarizeEntry {
 
     await this.repository.save({
       entryId,
+      plainTitle: draft.value.plainTitle,
       shortPhrase: draft.value.shortPhrase,
       bulletPoints: draft.value.bulletPoints,
+      impact: draft.value.impact,
       model: draft.value.model,
       generatedAt: new Date(),
     });
@@ -51,8 +53,10 @@ export class SummarizeEntry {
         entryId,
         publicationDate: event.payload.publicationDate,
         title,
+        plainTitle: draft.value.plainTitle,
         shortPhrase: draft.value.shortPhrase,
         bulletPoints: draft.value.bulletPoints,
+        impact: draft.value.impact,
         officialHtmlUrl: event.payload.officialHtmlUrl,
         model: draft.value.model,
       }),

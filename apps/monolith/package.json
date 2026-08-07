@@ -17,7 +17,8 @@
     "db:generate": "drizzle-kit generate",
     "db:apply": "tsx --env-file-if-exists=../../.env src/cli/migrate-db.ts",
     "notify:test": "tsx --env-file-if-exists=../../.env src/cli/test-notifiers.ts",
-    "serve": "tsx --env-file-if-exists=../../.env src/main.ts"
+    "serve": "tsx --env-file-if-exists=../../.env src/main.ts",
+    "resummarize": "tsx --env-file-if-exists=../../.env src/cli/resummarize.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.0",

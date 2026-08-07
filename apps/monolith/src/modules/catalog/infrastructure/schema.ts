@@ -1,4 +1,4 @@
-import { date, index, jsonb, pgSchema, text, timestamp } from "drizzle-orm/pg-core";
+import { date, index, integer, jsonb, pgSchema, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Schema del catálogo: la proyección de lectura que sirve la web.
@@ -22,8 +22,10 @@ export const catalogEntries = catalogSchema.table(
     officialPdfUrl: text("official_pdf_url").notNull(),
     // Nulos mientras la IA no ha resumido todavía: la disposición aparece
     // en la web con su enlace oficial aunque el resumen aún no exista.
+    plainTitle: text("plain_title"),
     shortPhrase: text("short_phrase"),
     bulletPoints: jsonb("bullet_points").$type<string[]>(),
+    impact: integer("impact"),
     model: text("model"),
     lastOfficialUpdateAt: date("last_official_update_at").notNull(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),

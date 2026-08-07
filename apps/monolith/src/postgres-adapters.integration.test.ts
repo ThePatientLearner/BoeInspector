@@ -148,8 +148,10 @@ describe("PostgresEntryRepository", () => {
 describe("PostgresSummaryRepository", () => {
   const summary = {
     entryId: "BOE-A-2026-16758",
+    plainTitle: "Cambios de horario para camiones de mercancías peligrosas",
     shortPhrase: "Se modifican las restricciones de circulación.",
     bulletPoints: ["Primer punto", "Segundo punto"],
+    impact: 2 as const,
     model: "MiniMax-M3",
     generatedAt: new Date("2026-08-06T10:00:00Z"),
   };
@@ -159,8 +161,10 @@ describe("PostgresSummaryRepository", () => {
     await repository.save(summary);
 
     const found = await repository.findByEntryId("BOE-A-2026-16758");
+    expect(found?.plainTitle).toBe(summary.plainTitle);
     expect(found?.shortPhrase).toBe(summary.shortPhrase);
     expect(found?.bulletPoints).toEqual(["Primer punto", "Segundo punto"]);
+    expect(found?.impact).toBe(2);
     expect(found?.model).toBe("MiniMax-M3");
   });
 
@@ -234,8 +238,10 @@ describe("PostgresCatalogProjection", () => {
     entryId: "BOE-A-2026-16758",
     publicationDate: day("2026-08-01"),
     title: "Resolución ISP/1933/2026",
+    plainTitle: "Cambios de horario para camiones de mercancías peligrosas",
     shortPhrase: "Se modifican las restricciones de circulación.",
     bulletPoints: ["Primer punto", "Segundo punto"],
+    impact: 2,
     officialHtmlUrl: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-16758",
     model: "MiniMax-M3",
   });
@@ -253,6 +259,9 @@ describe("PostgresCatalogProjection", () => {
 
     const view = await catalog.getEntry("BOE-A-2026-16758");
     expect(view?.title).toBe("Resolución ISP/1933/2026");
+    // Sin resumen todavía: la web cae al título oficial y no pinta impacto.
+    expect(view?.plainTitle).toBeNull();
+    expect(view?.impact).toBeNull();
     expect(view?.shortPhrase).toBeNull();
     // La fecha de actualización oficial viaja en el evento; confundirla con
     // la de publicación incumpliría las condiciones de reutilización.
@@ -265,8 +274,10 @@ describe("PostgresCatalogProjection", () => {
     await bus.publish(summarized);
 
     const view = await catalog.getEntry("BOE-A-2026-16758");
+    expect(view?.plainTitle).toBe("Cambios de horario para camiones de mercancías peligrosas");
     expect(view?.shortPhrase).toBe("Se modifican las restricciones de circulación.");
     expect(view?.bulletPoints).toEqual(["Primer punto", "Segundo punto"]);
+    expect(view?.impact).toBe(2);
     expect(view?.model).toBe("MiniMax-M3");
   });
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ImpactMeter } from "@/components/ImpactMeter";
 import { fetchEntry } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 
@@ -9,10 +10,13 @@ export default async function EntryPage({ params }: { params: Promise<{ id: stri
 
   return (
     <article className="dossier">
-      <p className="case-label">
-        Expediente {entry.id} · {entry.department}
-      </p>
-      <h1 className="dossier-title">{entry.title}</h1>
+      <div className="entry-head">
+        <p className="case-label">Expediente {entry.id}</p>
+        {entry.impact !== null && <ImpactMeter impact={entry.impact} />}
+      </div>
+
+      <h1 className="dossier-title">{entry.plainTitle ?? entry.title}</h1>
+      <p className="entry-department">{entry.department}</p>
       <p className="entry-meta">
         Publicado el {formatDate(entry.publicationDate)} · Última actualización del texto oficial:{" "}
         {formatDate(entry.lastOfficialUpdateAt)}
@@ -27,6 +31,15 @@ export default async function EntryPage({ params }: { params: Promise<{ id: stri
           PDF oficial
         </a>
       </div>
+
+      {/* El título oficial es exacto pero ilegible: se muestra aquí, sin
+          robarle el sitio al que sí se entiende. */}
+      {entry.plainTitle && (
+        <details className="official-title">
+          <summary>Título oficial en el BOE</summary>
+          <p>{entry.title}</p>
+        </details>
+      )}
 
       {entry.bulletPoints ? (
         <section className="summary">
@@ -47,8 +60,9 @@ export default async function EntryPage({ params }: { params: Promise<{ id: stri
 
       <footer className="legal-note">
         <p>
-          Resumen generado por inteligencia artificial{entry.model ? ` (${entry.model})` : ""}.
-          Puede contener errores. El único texto con valor oficial es el publicado en el BOE.
+          Resumen y título en lenguaje llano generados por inteligencia artificial
+          {entry.model ? ` (${entry.model})` : ""}. Pueden contener errores. El único texto con
+          valor oficial es el publicado en el BOE.
         </p>
         <p>
           Basado en datos de la Agencia Estatal Boletín Oficial del Estado (www.boe.es). Última

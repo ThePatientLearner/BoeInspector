@@ -1,3 +1,4 @@
+import { ImpactMeter } from "@/components/ImpactMeter";
 import { fetchDays } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 
@@ -34,11 +35,16 @@ export default async function HomePage() {
             <h2 className="day-heading">BOE del {formatDate(day.date)}</h2>
             {day.entries.map((entry) => (
               <article key={entry.id} className="entry-card">
-                <p className="case-label">Expediente {entry.id}</p>
+                <div className="entry-head">
+                  <p className="case-label">Expediente {entry.id}</p>
+                  {entry.impact !== null && <ImpactMeter impact={entry.impact} />}
+                </div>
+                {/* El titular es el título llano de la IA; si aún no existe,
+                    se cae al oficial para no dejar la ficha sin encabezado. */}
                 <h3 className="entry-title">
-                  <a href={`/d/${entry.id}`}>{entry.title}</a>
+                  <a href={`/d/${entry.id}`}>{entry.plainTitle ?? entry.title}</a>
                 </h3>
-                <p className="entry-meta">{entry.department}</p>
+                <p className="entry-department">{entry.department}</p>
                 {entry.shortPhrase ? (
                   <p className="entry-phrase">{entry.shortPhrase}</p>
                 ) : (

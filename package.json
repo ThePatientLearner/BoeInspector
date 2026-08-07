@@ -15,7 +15,8 @@
     "test": "npm run test --workspace @boe-inspector/monolith",
     "typecheck": "npm run typecheck --workspace @boe-inspector/monolith",
     "check:boundaries": "npm run check:boundaries --workspace @boe-inspector/monolith",
-    "notify:test": "npm run notify:test --workspace @boe-inspector/monolith"
+    "notify:test": "npm run notify:test --workspace @boe-inspector/monolith",
+    "resummarize": "npm run resummarize --workspace @boe-inspector/monolith --"
   },
   "engines": {
     "node": ">=22"

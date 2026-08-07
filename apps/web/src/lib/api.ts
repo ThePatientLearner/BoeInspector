@@ -6,11 +6,16 @@ export interface CatalogEntry {
   id: string;
   publicationDate: string;
   department: string;
+  /** Título oficial del BOE, literal. */
   title: string;
+  /** Título en lenguaje llano; nulo hasta que la IA resume. */
+  plainTitle: string | null;
   officialHtmlUrl: string;
   officialPdfUrl: string;
   shortPhrase: string | null;
   bulletPoints: string[] | null;
+  /** Impacto en el ciudadano, 1-5. Nulo hasta que hay resumen. */
+  impact: number | null;
   model: string | null;
   lastOfficialUpdateAt: string;
 }

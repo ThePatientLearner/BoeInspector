@@ -88,6 +88,16 @@ notificaciones. Es seguro repetirlo: la ingesta es idempotente, así que tambié
 sirve para recuperar un día perdido.
 
 ```bash
+npm run resummarize -- 2026-08-01        # regenera un día SIN notificar
+npm run resummarize -- BOE-A-2026-16758  # una disposición concreta
+```
+
+`resummarize` es la herramienta para cuando cambias el prompt: vuelve a pedir
+el resumen, actualiza la web y **no toca los canales**. Lo consigue publicando
+el evento en un bus donde el único suscriptor es el catálogo, así que
+`notifications` ni siquiera existe en ese proceso.
+
+```bash
 npm run notify:test          # mensaje de prueba por cada canal configurado
 ```
 

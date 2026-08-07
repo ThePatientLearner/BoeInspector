@@ -17,7 +17,8 @@
   --gold-dim: rgba(201, 168, 106, 0.35);
   --line: rgba(201, 168, 106, 0.22);
   --red: #b3222d;
-  --red-soft: #e05561;
+  --red-soft: #e8737d;
+  --orange: #e9a05c;
   --yellow: #f0c22e;
   --shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
 }
@@ -278,11 +279,109 @@ a {
   margin: 0.3rem 0 0;
 }
 
+/* El ministerio, en rojo claro: identifica de un vistazo quién firma. */
+.entry-department {
+  margin: 0.35rem 0 0;
+  color: var(--red-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* El resumen, en naranja: se distingue del texto oficial de un golpe de vista. */
 .entry-phrase {
   margin: 0.7rem 0 0;
   padding-top: 0.65rem;
   border-top: 1px dashed var(--line);
-  color: #d9d2c0;
+  color: var(--orange);
+}
+
+/* ── Medidor de impacto ────────────────────────────────────────── */
+
+.entry-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.impact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.impact-bars {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.impact-bars i {
+  width: 5px;
+  height: 13px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+/* Del verde (trámite interno) al rojo (afecta a casi todo el mundo). */
+.impact-1 .impact-bars i.on { background: #4fa96a; }
+.impact-2 .impact-bars i.on { background: #9bbf4a; }
+.impact-3 .impact-bars i.on { background: var(--yellow); }
+.impact-4 .impact-bars i.on { background: #e8873a; }
+.impact-5 .impact-bars i.on { background: #e0483f; }
+
+.impact-label {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.impact-1 .impact-label { color: #7dbf92; }
+.impact-2 .impact-label { color: #b6cf80; }
+.impact-3 .impact-label { color: #d9bd53; }
+.impact-4 .impact-label { color: #eda76e; }
+.impact-5 .impact-label { color: #ef7e77; }
+
+/* Visible para lectores de pantalla, invisible en pantalla. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Título oficial plegado ────────────────────────────────────── */
+
+.official-title {
+  margin: 1.4rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+}
+
+.official-title summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-warm);
+}
+
+.official-title p {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .badge-pending {

@@ -20,10 +20,12 @@ export class InMemoryCatalogProjection implements CatalogReadModel {
         publicationDate: p.publicationDate,
         department: p.department,
         title: p.title,
+        plainTitle: null,
         officialHtmlUrl: p.officialHtmlUrl,
         officialPdfUrl: p.officialPdfUrl,
         shortPhrase: null,
         bulletPoints: null,
+        impact: null,
         model: null,
         lastOfficialUpdateAt: p.lastOfficialUpdateAt,
       });
@@ -35,8 +37,10 @@ export class InMemoryCatalogProjection implements CatalogReadModel {
       if (!existing) return;
       this.entries.set(p.entryId, {
         ...existing,
+        plainTitle: p.plainTitle,
         shortPhrase: p.shortPhrase,
         bulletPoints: p.bulletPoints,
+        impact: p.impact,
         model: p.model,
       });
     });

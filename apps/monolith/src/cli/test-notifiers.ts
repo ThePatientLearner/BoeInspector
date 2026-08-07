@@ -39,10 +39,10 @@ async function main(): Promise<void> {
   // Una disposición real, para ver el formato definitivo y comprobar que
   // los enlaces y el pie legal salen bien.
   const message = {
-    title:
-      "PRUEBA · Resolución ISP/1933/2026, de 15 de junio, de modificación de las restricciones a la circulación durante el año 2026.",
+    title: "PRUEBA · Nuevos horarios para camiones con mercancías peligrosas en Cataluña",
     shortPhrase:
       "Mensaje de prueba de BOE Inspector. Si lo estás leyendo, el canal está bien configurado.",
+    impact: 3,
     officialUrl: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-16758",
     summaryUrl: `${config.publicWebUrl}/d/BOE-A-2026-16758`,
   };

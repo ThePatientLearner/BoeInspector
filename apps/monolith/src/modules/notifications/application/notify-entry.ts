@@ -26,10 +26,11 @@ export class NotifyEntry {
   }
 
   private async handle(event: SummaryGenerated): Promise<void> {
-    const { entryId, title, shortPhrase, officialHtmlUrl } = event.payload;
+    const { entryId, plainTitle, shortPhrase, impact, officialHtmlUrl } = event.payload;
     const message = {
-      title,
+      title: plainTitle,
       shortPhrase,
+      impact,
       officialUrl: officialHtmlUrl,
       summaryUrl: `${this.publicWebUrl}/d/${entryId}`,
     };

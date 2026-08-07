@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { err, ok, type Result } from "../../../shared/domain/result.js";
+import type { ImpactLevel } from "../domain/summary.js";
 import type { Summarizer, SummaryDraft } from "../domain/summarizer.js";
 
 /**
@@ -47,14 +48,40 @@ const REQUEST_TIMEOUT_MS = 120_000;
 /** El texto que se le pasa al revisor va recortado: solo necesita contrastar. */
 const REVIEW_CONTEXT_CHARS = 120_000;
 
+/** Tope del título llano. Por encima deja de caber en una línea en móvil. */
+const MAX_PLAIN_TITLE_CHARS = 90;
+
+/**
+ * La escala de impacto va literal en los dos prompts. Es lo que la web pinta
+ * como indicador, así que tiene que significar lo mismo hoy y dentro de un
+ * año: si se toca, los resúmenes antiguos dejan de ser comparables.
+ */
+const IMPACT_SCALE = [
+  "  1 = trámite interno de la Administración; el ciudadano no nota nada.",
+  "  2 = afecta a un colectivo pequeño o muy especializado.",
+  "  3 = afecta a un colectivo amplio, o cambia precios, tasas o trámites.",
+  "  4 = impone obligaciones, plazos o costes relevantes a mucha gente.",
+  "  5 = afecta a casi toda la población, o moviliza mucho dinero público.",
+].join("\n");
+
 const DRAFT_SYSTEM_PROMPT = [
   "Eres un asistente que resume disposiciones del BOE para ciudadanos sin formación jurídica.",
   "Escribe TODO en español de España. No uses ninguna otra lengua ni alfabeto.",
   "Respondes SIEMPRE con un único objeto JSON válido, sin texto alrededor ni bloques de código.",
-  'Forma exacta: {"fraseCorta": "...", "puntos": ["...", "..."]}',
+  'Forma exacta: {"titulo": "...", "fraseCorta": "...", "puntos": ["...", "..."], "impacto": 3}',
+  "",
+  "- titulo: máximo 80 caracteres. El título REAL del BOE es ilegible para la",
+  "  mayoría; escribe uno que cualquiera entienda de un vistazo. Di QUÉ pasa,",
+  "  no cómo se llama la norma. Sin números de norma, sin fechas, sin siglas.",
+  '  Mal: "Resolución ISP/1933/2026, de 15 de junio, de modificación de la…"',
+  '  Bien: "Nuevos horarios para camiones con mercancías peligrosas en Cataluña"',
   "- fraseCorta: máximo 200 caracteres. Qué cambia y a quién afecta.",
   "- puntos: entre 5 y 8 puntos con lo esencial: a quién aplica, obligaciones,",
   "  plazos, cuantías y entrada en vigor.",
+  "- impacto: número entero del 1 al 5, según cuánto afecta a un ciudadano",
+  "  corriente o cuánto dinero público mueve:",
+  IMPACT_SCALE,
+  "",
   "- Lenguaje claro y directo, sin jerga jurídica.",
   "- No inventes nada que no esté en el texto. Si un dato no aparece, no lo menciones.",
 ].join("\n");
@@ -70,12 +97,18 @@ const REVIEW_SYSTEM_PROMPT = [
   "   por el texto oficial. No añadas datos que no aparezcan en él.",
   "3. PRECISIÓN: comprueba que fechas, plazos, cuantías y nombres coinciden",
   "   exactamente con el texto oficial.",
-  "4. CLARIDAD: frases directas, sin jerga jurídica ni siglas sin explicar.",
-  "5. FORMATO: fraseCorta de 200 caracteres como máximo; entre 5 y 8 puntos.",
+  "4. TÍTULO: que se entienda sin conocimientos jurídicos y describa lo que",
+  "   pasa, no cómo se llama la norma. Máximo 80 caracteres, sin números de",
+  "   norma ni fechas. Si el borrador copia el título oficial, reescríbelo.",
+  "5. IMPACTO: comprueba que el número del 1 al 5 encaja con esta escala:",
+  IMPACT_SCALE,
+  "   Ante la duda entre dos niveles, elige el más bajo.",
+  "6. CLARIDAD: frases directas, sin jerga jurídica ni siglas sin explicar.",
+  "7. FORMATO: fraseCorta de 200 caracteres como máximo; entre 5 y 8 puntos.",
   "",
   "Si el borrador ya es correcto, devuélvelo sin cambios.",
   "Responde ÚNICAMENTE con el objeto JSON corregido, sin texto alrededor:",
-  '{"fraseCorta": "...", "puntos": ["...", "..."]}',
+  '{"titulo": "...", "fraseCorta": "...", "puntos": ["...", "..."], "impacto": 3}',
 ].join("\n");
 
 /**
@@ -87,8 +120,13 @@ const REVIEW_SYSTEM_PROMPT = [
 const NON_LATIN_SCRIPT = /[Ѐ-ӿ؀-ۿऀ-ॿ一-鿿぀-ヿ가-힯]/;
 
 const draftSchema = z.object({
+  // Holgado a propósito: si la IA se pasa de 80 caracteres preferimos recortar
+  // nosotros a descartar un resumen por lo demás correcto.
+  titulo: z.string().min(1).max(200),
   fraseCorta: z.string().min(1).max(400),
   puntos: z.array(z.string().min(1)).min(3).max(10),
+  // A veces devuelve el número como texto ("4"), de ahí la coerción.
+  impacto: z.coerce.number().int().min(1).max(5),
 });
 
 type Draft = z.infer<typeof draftSchema>;
@@ -146,8 +184,10 @@ export class HttpSummarizer implements Summarizer {
 
   private toSummary(draft: Draft): SummaryDraft {
     return {
+      plainTitle: truncate(draft.titulo, MAX_PLAIN_TITLE_CHARS),
       shortPhrase: draft.fraseCorta,
       bulletPoints: draft.puntos,
+      impact: draft.impacto as ImpactLevel,
       model: this.options.model,
     };
   }
@@ -240,7 +280,7 @@ function validate(raw: string, attempt: number): Result<Draft> {
     return err(new Error(`JSON con forma inesperada (intento ${attempt})`));
   }
 
-  const foreign = [result.data.fraseCorta, ...result.data.puntos].find((t) =>
+  const foreign = [result.data.titulo, result.data.fraseCorta, ...result.data.puntos].find((t) =>
     NON_LATIN_SCRIPT.test(t),
   );
   if (foreign) {
@@ -250,4 +290,13 @@ function validate(raw: string, attempt: number): Result<Draft> {
   }
 
   return ok(result.data);
+}
+
+/** Recorta por la última palabra completa, sin partir a mitad. */
+function truncate(text: string, max: number): string {
+  const clean = text.trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`;
 }
