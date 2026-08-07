@@ -354,27 +354,6 @@ a {
   .notify-actions {
     flex-direction: column;
   }
-
-  /* La cuenta atrás también abandona el emblema en móvil: el espacio sobre
-     la imagen ya lo ocupa el botón. Pasa a la esquina superior izquierda
-     de la pantalla, simétrica al botón. */
-  .countdown {
-    position: fixed;
-    top: 0.7rem;
-    left: 0.7rem;
-    padding: 0.4rem 0.7rem;
-    font-size: 0.72rem;
-  }
-
-  .countdown-clock,
-  .countdown-robot {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .countdown-time {
-    font-size: 0.85rem;
-  }
 }
 
 /* Cinta con los colores de la bandera, como la del emblema */
@@ -1371,5 +1350,68 @@ a {
   .impact-filter .chip {
     flex: 1 1 auto;
     text-align: center;
+  }
+
+  /* La cuenta atrás abandona el emblema en móvil: el espacio sobre la
+     imagen ya lo ocupa el botón "Notificar gratis". Pasa a flotar abajo a
+     la izquierda, simétrica a ese botón y con su mismo margen.
+     Esta regla vive en el bloque @media del final del archivo (y no junto
+     al resto de ".notify-*") a propósito: la definición de escritorio de
+     ".countdown" está más abajo que el primer bloque @media, así que con
+     la misma especificidad ganaba ella pese a estar en pantalla móvil. Al
+     situar esta regla después de esa definición, el orden de cascada
+     vuelve a favorecer a la de móvil. */
+  .countdown {
+    position: fixed;
+    top: auto;
+    bottom: 1.3rem;
+    left: 1.3rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .countdown-clock,
+  .countdown-robot {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .countdown-time {
+    font-size: 0.85rem;
+  }
+}
+
+/* Por debajo de 360px (iPhone SE y similares) los dos flotantes, con su
+   margen de 1.3rem y sus tamaños de 375px, ya no caben uno junto al otro:
+   se solapan. Se encogen ambos un poco más en vez de moverlos, para que
+   sigan reconociéndose como el mismo par de botones que en el resto de
+   móviles. */
+@media (max-width: 360px) {
+  .notify-trigger {
+    gap: 0.4rem;
+    padding: 0.36rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .countdown {
+    padding: 0.32rem 0.55rem;
+    font-size: 0.62rem;
+  }
+
+  .countdown-clock,
+  .countdown-robot {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  /* "PRÓXIMA REVISIÓN" con su tracking de 0.18em es lo que de verdad marca
+     el ancho de la píldora, más que el reloj: se aprieta aquí. */
+  .countdown-label {
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+  }
+
+  .countdown-time {
+    font-size: 0.74rem;
   }
 }
