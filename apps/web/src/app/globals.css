@@ -328,15 +328,27 @@ a {
        estira para llenar el hueco entre los dos en vez de anclarse solo
        por abajo. */
     top: auto;
-    bottom: 0.7rem;
-    right: 0.7rem;
-    padding: 0.4rem 0.7rem;
-    font-size: 0.75rem;
+    /* Más separación de la esquina que en escritorio: aquí no hay nada más
+       flotando cerca, así que puede respirar sin robarle sitio a nada. */
+    bottom: 1.3rem;
+    right: 1.3rem;
+    /* Iconos arriba, texto debajo: el botón crece en vertical en vez de en
+       horizontal. Un 10% más grande que la versión en fila (era 0.4rem
+       0.7rem / 0.75rem). */
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.44rem 0.77rem;
+    font-size: 0.825rem;
+    text-align: center;
+  }
+
+  .notify-icons {
+    gap: 0.275rem;
   }
 
   .notify-icon {
-    width: 0.85rem;
-    height: 0.85rem;
+    width: 0.935rem;
+    height: 0.935rem;
   }
 
   .notify-actions {
