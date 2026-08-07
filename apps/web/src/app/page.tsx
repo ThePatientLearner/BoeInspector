@@ -24,7 +24,7 @@ export default async function HomePage() {
             hero en escritorio y, en móvil, a la de la pantalla (ver CSS). */}
         <NotifyButton />
         <div className="hero-caption">
-          <h1>El BOE, bajo la lupa cada mañana</h1>
+          <h1>Resumen Diario y filtrado del BOE</h1>
           {/* La cita sustituye al subtítulo descriptivo: lo que motiva el
               servicio ya no necesita explicarse, basta con declararlo. */}
           <blockquote className="hero-quote">
