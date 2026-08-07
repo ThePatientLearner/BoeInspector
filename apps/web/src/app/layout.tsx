@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SiteMenu } from "@/components/SiteMenu";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               obligaría a rehacer las tres cosas. Está en el commit 4a68870 por
               si algún día se retoma. */}
           <div className="header-inner">
+            <SiteMenu />
             <a href="/" className="site-title">
               Agente<span>BOE</span>.com
             </a>

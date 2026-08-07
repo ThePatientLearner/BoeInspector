@@ -111,9 +111,115 @@ a {
 }
 
 .header-inner {
+  position: relative;
   max-width: 56rem;
   margin: 0 auto;
   padding: 1.2rem 1rem 0.9rem;
+}
+
+/* ── Menú de la cabecera ───────────────────────────────────────── */
+
+/* Absoluto y no en flujo: así el título sigue centrado respecto a la
+   cabecera entera, sin que el menú le robe espacio por la izquierda. */
+.site-menu {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+}
+
+.menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.menu-trigger:hover,
+.menu-trigger:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  outline: none;
+}
+
+.menu-bars {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  width: 0.95rem;
+}
+
+.menu-bars i {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+
+.menu-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 15rem;
+  padding: 0.4rem;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  animation: menu-drop 140ms ease;
+}
+
+.menu-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 120ms ease;
+}
+
+.menu-link:hover,
+.menu-link:focus-visible {
+  background: rgba(201, 168, 106, 0.12);
+  outline: none;
+}
+
+.menu-link-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+}
+
+.menu-link-note {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+@keyframes menu-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel {
+    animation: none;
+  }
 }
 
 .site-title {
@@ -1309,6 +1415,29 @@ a {
     height: 210px;
   }
 
+  /* La palabra "Menú" sobra en pantallas estrechas: las tres barras ya se
+     entienden, y así el botón no invade el título centrado. */
+  .site-menu {
+    top: 0.85rem;
+    left: 0.7rem;
+  }
+
+  .menu-trigger {
+    padding: 0.45rem 0.6rem;
+  }
+
+  .menu-word {
+    display: none;
+  }
+
+  /* El panel se ajusta al ancho de la pantalla en vez de salirse por la
+     derecha: con min-width fijo desbordaba a 320px. */
+  .menu-panel {
+    min-width: 0;
+    width: max-content;
+    max-width: calc(100vw - 1.4rem);
+  }
+
   .hero::after {
     content: none;
   }
@@ -1418,6 +1547,15 @@ a {
     gap: 0.4rem;
     padding: 0.36rem 0.6rem;
     font-size: 0.7rem;
+  }
+
+  /* A 320px "AGENTEBOE.COM" es tan ancho que su primera letra queda debajo
+     del botón de menú. Se le reserva el hueco con padding en vez de
+     encoger la tipografía: el título es la marca y debe seguir legible. */
+  .site-title {
+    padding-left: 2.6rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.1em;
   }
 
   .countdown {
