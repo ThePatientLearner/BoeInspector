@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BOE Inspector — el BOE, resumido cada día",
+  title: "Agente BOE — el BOE, resumido cada día",
   description:
     "Resúmenes diarios de las disposiciones generales del BOE, generados por IA, con enlace al texto oficial. Servicio gratuito e independiente, no vinculado al BOE.",
 };
