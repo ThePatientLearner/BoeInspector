@@ -135,6 +135,7 @@ a {
   color: var(--muted);
   font-size: 0.82rem;
   margin: 0.4rem 0 0;
+  text-align: center;
 }
 
 /* ── Botón "Notificar gratis" + modal ─────────────────────────── */
@@ -335,6 +336,27 @@ a {
   .notify-actions {
     flex-direction: column;
   }
+
+  /* La cuenta atrás también abandona el emblema en móvil: el espacio sobre
+     la imagen ya lo ocupa el botón. Pasa a la esquina superior izquierda
+     de la pantalla, simétrica al botón. */
+  .countdown {
+    position: fixed;
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .countdown-clock,
+  .countdown-robot {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .countdown-time {
+    font-size: 0.85rem;
+  }
 }
 
 /* Cinta con los colores de la bandera, como la del emblema */
@@ -398,6 +420,128 @@ a {
   color: var(--muted);
   font-size: clamp(0.88rem, 2.4vw, 1rem);
   max-width: 38rem;
+}
+
+/* La cita de Jefferson sustituye al subtítulo descriptivo: la destacamos
+   con el dorado del título y le damos aire para que no compita con el h1. */
+.hero-quote {
+  margin: 0.7rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.hero-quote p {
+  margin: 0;
+  font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+  font-style: italic;
+  color: var(--ink);
+  max-width: none;
+}
+
+.hero-quote cite {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  font-style: normal;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-warm);
+}
+
+/* ── Cuenta atrás a la siguiente revisión del BOE ──────────────── */
+
+/* Misma piel que el botón de Notificar: panel-2 sobre panel, borde
+   dorado tenue. Lo colocamos en la esquina superior izquierda del hero
+   para hacer simetría con el botón de la derecha. */
+.countdown {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.9rem;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.countdown-clock,
+.countdown-robot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--gold-bright);
+}
+
+.countdown-clock svg,
+.countdown-robot svg {
+  width: 100%;
+  height: 100%;
+}
+
+.countdown-text {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.countdown-label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-warm);
+}
+
+.countdown-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-bright);
+  font-size: 0.92rem;
+}
+
+/* Estado "IA revisando BOE": el robot cambia al color cálido y aparece un
+   spinner a su lado. El svg del robot lleva un spinner superpuesto que
+   gira; el círculo de carga se oculta visualmente porque el robot ya
+   transmite la idea. */
+.countdown-progress {
+  border-color: var(--gold-dim);
+  color: var(--gold-bright);
+}
+
+.countdown-progress .countdown-robot {
+  position: relative;
+  color: var(--gold-bright);
+}
+
+.countdown-spinner {
+  position: absolute;
+  inset: -2px;
+  border: 1.5px solid transparent;
+  border-top-color: var(--gold);
+  border-right-color: var(--gold-dim);
+  border-radius: 50%;
+  animation: countdown-spin 0.9s linear infinite;
+}
+
+@keyframes countdown-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown-spinner {
+    animation: none;
+  }
 }
 
 /* ── Buscador ──────────────────────────────────────────────────── */

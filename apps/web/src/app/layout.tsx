@@ -57,11 +57,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
         <main className="site-main">{children}</main>
         <footer className="site-footer">
-          {/* El lema del proyecto. */}
-          <blockquote className="site-motto">
-            <p>«La información es la moneda de la democracia»</p>
-            <cite>Thomas Jefferson</cite>
-          </blockquote>
+          {/* El lema del proyecto vivía aquí; se subió al hero para que la
+              portada llevase el peso simbólico y el pie solo informase. */}
           <p>
             Basado en datos de la{" "}
             <a href="https://www.boe.es" rel="noopener noreferrer">

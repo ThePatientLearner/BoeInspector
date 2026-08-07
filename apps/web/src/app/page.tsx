@@ -1,3 +1,4 @@
+import { Countdown } from "@/components/Countdown";
 import { EntryBrowser } from "@/components/EntryBrowser";
 import { NotifyButton } from "@/components/NotifyButton";
 import { fetchDays } from "@/lib/api";
@@ -16,15 +17,20 @@ export default async function HomePage() {
           width={1920}
           height={1047}
         />
+        {/* Cuenta atrás a la izquierda del emblema, simétrica al botón de
+            la derecha. En móvil pasa a quedar debajo del caption (ver CSS). */}
+        <Countdown />
         {/* Botón sobre el emblema: anclado a la esquina superior derecha del
             hero en escritorio y, en móvil, a la de la pantalla (ver CSS). */}
         <NotifyButton />
         <div className="hero-caption">
           <h1>El BOE, bajo la lupa cada mañana</h1>
-          <p>
-            Cada disposición general, resumida por IA en lenguaje claro — con el texto oficial
-            siempre a un clic.
-          </p>
+          {/* La cita sustituye al subtítulo descriptivo: lo que motiva el
+              servicio ya no necesita explicarse, basta con declararlo. */}
+          <blockquote className="hero-quote">
+            <p>«La información es la moneda de la democracia»</p>
+            <cite>Thomas Jefferson</cite>
+          </blockquote>
         </div>
       </section>
 
