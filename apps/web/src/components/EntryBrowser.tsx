@@ -100,73 +100,19 @@ export function EntryBrowser({ days }: { days: CatalogDay[] }) {
 
   return (
     <>
-      <section className="filters" aria-label="Filtros de búsqueda">
-        <div className="filter-row">
-          <label className="field field-search">
-            <span>Buscar</span>
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Palabra, ministerio, expediente…"
-            />
-          </label>
-
-          <ComingSoonButton
-            className="btn-download"
-            label="⤓ Descargar resúmenes"
-            message="La descarga de resúmenes estará disponible próximamente."
-          />
-        </div>
-
-        <div className="filter-row">
-          <label className="field field-date">
-            <span>Desde</span>
-            <input
-              type="date"
-              value={from}
-              min={earliest}
-              max={latest}
-              onChange={(e) => setFrom(e.target.value)}
-            />
-          </label>
-
-          <label className="field field-date">
-            <span>Hasta</span>
-            <input
-              type="date"
-              value={to}
-              min={earliest}
-              max={latest}
-              onChange={(e) => setTo(e.target.value)}
-            />
-          </label>
-
-          <fieldset className="field field-impact">
-            <legend>Impacto mínimo</legend>
-            <div className="impact-filter">
-              {IMPACT_FILTERS.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className={`chip chip-${option.value}${
-                    minImpact === option.value ? " on" : ""
-                  }`}
-                  aria-pressed={minImpact === option.value}
-                  onClick={() => setMinImpact(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-        </div>
-
-        <p className="filter-summary" role="status">
+      <details className="filters" aria-label="Filtros de búsqueda">
+        <summary className="filter-summary">
           {filtering ? (
             <>
               <strong>{shown}</strong> de {total} disposiciones{" "}
-              <button type="button" className="link-reset" onClick={reset}>
+              <button
+                type="button"
+                className="link-reset"
+                onClick={(e) => {
+                  e.preventDefault();
+                  reset();
+                }}
+              >
                 Quitar filtros
               </button>
             </>
@@ -175,8 +121,74 @@ export function EntryBrowser({ days }: { days: CatalogDay[] }) {
               {total} disposiciones · del {formatDate(earliest)} al {formatDate(latest)}
             </>
           )}
-        </p>
-      </section>
+          <span className="filter-toggle" aria-hidden="true">
+            Filtrar
+          </span>
+        </summary>
+
+        <div className="filter-body">
+          <div className="filter-row">
+            <label className="field field-search">
+              <span>Buscar</span>
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Palabra, ministerio, expediente…"
+              />
+            </label>
+
+            <ComingSoonButton
+              className="btn-download"
+              label="⤓ Descargar resúmenes"
+              message="La descarga de resúmenes estará disponible próximamente."
+            />
+          </div>
+
+          <div className="filter-row">
+            <label className="field field-date">
+              <span>Desde</span>
+              <input
+                type="date"
+                value={from}
+                min={earliest}
+                max={latest}
+                onChange={(e) => setFrom(e.target.value)}
+              />
+            </label>
+
+            <label className="field field-date">
+              <span>Hasta</span>
+              <input
+                type="date"
+                value={to}
+                min={earliest}
+                max={latest}
+                onChange={(e) => setTo(e.target.value)}
+              />
+            </label>
+
+            <fieldset className="field field-impact">
+              <legend>Impacto mínimo</legend>
+              <div className="impact-filter">
+                {IMPACT_FILTERS.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`chip chip-${option.value}${
+                      minImpact === option.value ? " on" : ""
+                    }`}
+                    aria-pressed={minImpact === option.value}
+                    onClick={() => setMinImpact(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </details>
 
       {shown === 0 ? (
         <p className="empty-state">
