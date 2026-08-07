@@ -720,6 +720,114 @@ a {
   font-size: 0.8rem;
 }
 
+/* ── Páginas legales ───────────────────────────────────────────── */
+
+/* Texto largo para leer, no para hojear: medida más estrecha que el resto
+   del sitio e interlineado más suelto. */
+.legal-page {
+  max-width: 44rem;
+  line-height: 1.75;
+}
+
+.legal-page h1 {
+  margin: 0 0 1.6rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--gold-bright);
+  letter-spacing: 0.02em;
+}
+
+.legal-page h2 {
+  margin: 2.2rem 0 0.7rem;
+  font-size: clamp(1rem, 2.6vw, 1.15rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.legal-page p,
+.legal-page li {
+  color: var(--ink);
+}
+
+.legal-page ul,
+.legal-page ol {
+  padding-left: 1.3rem;
+}
+
+.legal-page li {
+  margin: 0.35rem 0;
+}
+
+.legal-page a {
+  color: var(--gold-bright);
+}
+
+/* Lo que no puede pasar desapercibido: la cláusula de independencia del BOE
+   y el hecho de que no hay cookies. Marco rojo, como un sello en el margen. */
+.legal-warning {
+  border: 1px solid rgba(232, 115, 125, 0.5);
+  border-left: 3px solid var(--red-soft);
+  border-radius: 10px;
+  background: rgba(179, 34, 45, 0.09);
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.8rem;
+}
+
+.legal-warning p {
+  margin: 0.5rem 0;
+}
+
+.legal-warning p:first-child {
+  margin-top: 0;
+}
+
+.legal-warning p:last-child {
+  margin-bottom: 0;
+}
+
+/* Las tablas se salen en móvil: que haga scroll la tabla, nunca la página. */
+.table-scroll {
+  overflow-x: auto;
+  margin: 0.9rem 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.legal-page table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.legal-page th,
+.legal-page td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.legal-page th {
+  background: rgba(201, 168, 106, 0.08);
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.legal-page tr:last-child td {
+  border-bottom: 0;
+}
+
+.legal-updated {
+  margin-top: 2.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 /* ── Pie ───────────────────────────────────────────────────────── */
 
 .site-footer {
