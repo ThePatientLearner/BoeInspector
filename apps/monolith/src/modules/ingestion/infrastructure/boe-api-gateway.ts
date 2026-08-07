@@ -69,6 +69,37 @@ function toArray(value: unknown): Record<string, unknown>[] {
   );
 }
 
+/**
+ * Contenedores que pueden envolver a los ítems dentro de un departamento.
+ * El BOE los combina de forma distinta según el día — formas vistas en
+ * sumarios reales:
+ *
+ *   departamento → item                      (departamento con una sola norma)
+ *   departamento → epigrafe → item           (2026-08-01)
+ *   departamento → texto → epigrafe → item   (2026-08-07)
+ *
+ * Enumerar combinaciones es frágil: el 7 de agosto aparecieron tres leyes
+ * envueltas en `texto` y la ingesta las descartó en silencio, sin error.
+ * Por eso se desciende por los contenedores conocidos en lugar de asumir
+ * una profundidad fija.
+ */
+const ITEM_CONTAINERS = ["texto", "epigrafe"] as const;
+
+function collectItems(node: Record<string, unknown>): Record<string, unknown>[] {
+  const found = [...toArray(node["item"])];
+  for (const key of ITEM_CONTAINERS) {
+    for (const child of toArray(node[key])) {
+      found.push(...collectItems(child));
+    }
+  }
+  return found;
+}
+
+/** Expuesto solo para los tests: el parser es la parte frágil del adapter. */
+export function parseSummaryItemsForTest(body: unknown): BoeSummaryItem[] {
+  return parseSummaryItems(body as SumarioResponse);
+}
+
 function parseSummaryItems(body: SumarioResponse): BoeSummaryItem[] {
   const items: BoeSummaryItem[] = [];
   for (const diario of toArray(body.data?.sumario?.diario)) {
@@ -76,14 +107,7 @@ function parseSummaryItems(body: SumarioResponse): BoeSummaryItem[] {
       const sectionCode = String(seccion["codigo"] ?? "");
       for (const departamento of toArray(seccion["departamento"])) {
         const departmentName = String(departamento["nombre"] ?? "");
-        for (const epigrafe of toArray(departamento["epigrafe"])) {
-          for (const item of toArray(epigrafe["item"])) {
-            const parsed = parseItem(item, sectionCode, departmentName);
-            if (parsed) items.push(parsed);
-          }
-        }
-        // Algunos departamentos llevan ítems directamente, sin epígrafe.
-        for (const item of toArray(departamento["item"])) {
+        for (const item of collectItems(departamento)) {
           const parsed = parseItem(item, sectionCode, departmentName);
           if (parsed) items.push(parsed);
         }
