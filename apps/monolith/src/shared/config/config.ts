@@ -19,6 +19,13 @@ const configSchema = z.object({
     .enum(["true", "false"])
     .default("true")
     .transform((value) => value === "true"),
+  /**
+   * Impacto mínimo (1-5) para publicar en los canales. Por debajo, la
+   * disposición se ingiere y aparece en la web, pero no se notifica: los
+   * trámites internos no merecen un aviso en el móvil de nadie.
+   * Poner 1 equivale a notificarlo todo.
+   */
+  notifyMinImpact: z.coerce.number().int().min(1).max(5).default(3),
   cronSchedule: z.string().min(1).default("30 8 * * 1-6"),
   timeZone: z.string().min(1).default("Europe/Madrid"),
   apiPort: z.coerce.number().int().positive().default(3001),
@@ -38,6 +45,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     aiModel: env["AI_MODEL"],
     aiApiKey: env["AI_API_KEY"],
     aiReview: env["AI_REVIEW"],
+    notifyMinImpact: env["NOTIFY_MIN_IMPACT"],
     cronSchedule: env["CRON_SCHEDULE"],
     timeZone: env["TZ"],
     apiPort: env["API_PORT"],

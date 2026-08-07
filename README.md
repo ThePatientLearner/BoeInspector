@@ -192,3 +192,8 @@ launchctl load   ~/Library/LaunchAgents/com.agenteboe.monolith.plist   # arranca
 > proceso: si el Mac está apagado a las 08:30, ese boletín no se ingiere y no
 > hay reintento posterior. Para recuperarlo: `npm run ingest -- 2026-08-10`
 > (ojo: notifica a los canales).
+
+> **Umbral de notificación.** Solo se publica en los canales lo que alcanza
+> `NOTIFY_MIN_IMPACT` (3 por defecto, escala 1-5). Por debajo, la disposición
+> se ingiere y aparece en la web, pero no notifica: un trámite interno no
+> merece un aviso en el móvil de mil personas. Con 1 se notifica todo.

@@ -99,6 +99,7 @@ export function buildApplication(config: Config, logger: Logger, db: Database): 
     eventBus,
     logger,
     config.publicWebUrl,
+    config.notifyMinImpact,
   ).register(eventBus);
 
   return { ingest, catalog, eventBus, channels: notifiers.map((n) => n.channel) };

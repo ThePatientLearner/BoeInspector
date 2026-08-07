@@ -9,6 +9,12 @@ import type { Notifier } from "../domain/notifier.js";
  * Reacciona a SummaryGenerated: publica en cada canal registrado y anota
  * el envío. Idempotente por canal: un fallo en Discord no re-publica en
  * Telegram al reintentar.
+ *
+ * No todo se notifica. Solo las disposiciones que alcanzan el impacto
+ * mínimo (NOTIFY_MIN_IMPACT, 3 por defecto) llegan a los canales; el resto
+ * se ingiere y se publica en la web, pero sin avisar a nadie. Un cambio en
+ * la política interna de un ministerio no merece una notificación en el
+ * móvil de mil personas.
  */
 export class NotifyEntry {
   constructor(
@@ -17,6 +23,7 @@ export class NotifyEntry {
     private readonly eventBus: EventBus,
     private readonly logger: Logger,
     private readonly publicWebUrl: string,
+    private readonly minImpact: number,
   ) {}
 
   register(eventBus: EventBus): void {
@@ -27,6 +34,19 @@ export class NotifyEntry {
 
   private async handle(event: SummaryGenerated): Promise<void> {
     const { entryId, plainTitle, shortPhrase, impact, officialHtmlUrl } = event.payload;
+
+    if (impact < this.minImpact) {
+      this.logger.info(
+        { entryId, impact, minImpact: this.minImpact },
+        "Impacto por debajo del umbral: se publica en la web pero no se notifica",
+      );
+      // Se emite igualmente: la fase de notificación ha terminado para esta
+      // disposición (con cero envíos, pero terminada). Sin esto, la entrada
+      // se quedaría en "summarized" para siempre y parecería atascada.
+      await this.eventBus.publish(entryNotified({ entryId, channels: [] }));
+      return;
+    }
+
     const message = {
       title: plainTitle,
       shortPhrase,
