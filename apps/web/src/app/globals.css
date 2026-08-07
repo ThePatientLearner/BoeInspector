@@ -319,10 +319,16 @@ a {
 
 @media (max-width: 640px) {
   /* El hero en móvil apila imagen y pie, así que el botón deja de tener
-     sentido sobre la imagen: pasa a la esquina de la pantalla. */
+     sentido sobre la imagen: pasa a la esquina de la pantalla. Abajo y no
+     arriba, para no tapar el título ni el disclaimer de la cabecera. */
   .notify-trigger {
     position: fixed;
-    top: 0.7rem;
+    /* Anula el `top: 1rem` de la regla de escritorio: si quedan top y
+       bottom fijados a la vez, un `position: fixed` sin altura propia se
+       estira para llenar el hueco entre los dos en vez de anclarse solo
+       por abajo. */
+    top: auto;
+    bottom: 0.7rem;
     right: 0.7rem;
     padding: 0.4rem 0.7rem;
     font-size: 0.75rem;
