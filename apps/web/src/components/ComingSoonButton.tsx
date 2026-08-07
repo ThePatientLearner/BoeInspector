@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
  * Botón para una función que todavía no existe.
  *
  * Si recibe `href` se comporta como un enlace normal; si no, avisa de que la
- * función está en camino. Esa bifurcación es deliberada: el día que haya una
- * URL de PayPal basta con rellenar la variable de entorno `DONATE_URL` para
- * que el botón pase a donar de verdad, sin tocar una línea de código.
+ * función está en camino. Esa bifurcación deja el aviso como un estado del
+ * botón y no como un botón distinto, así que activar la función el día de
+ * mañana es pasarle un destino, no reescribir la cabecera.
  */
 export function ComingSoonButton({
   label,

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ComingSoonButton } from "@/components/ComingSoonButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -39,25 +38,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <WaveBackground />
         <header className="site-header">
+          {/* Aquí vivió un botón de donar. Se retiró a propósito: la gratuidad
+              es un pilar de LEGAL.md (identificación reducida del art. 10 LSSI,
+              límites de responsabilidad, marco de reutilización), y cobrar
+              obligaría a rehacer las tres cosas. Está en el commit 4a68870 por
+              si algún día se retoma. */}
           <div className="header-inner">
-            <div className="header-brand">
-              <a href="/" className="site-title">
-                BOE <span>Inspector</span>
-              </a>
-              {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
-              <p className="site-disclaimer">
-                Proyecto independiente y gratuito. Los resúmenes los genera una IA y no sustituyen
-                al texto oficial del BOE.
-              </p>
-            </div>
-            {/* Sin DONATE_URL el botón solo avisa; en cuanto la variable exista
-                en Vercel pasa a enlazar a PayPal sin desplegar código nuevo. */}
-            <ComingSoonButton
-              className="btn-donate"
-              label="♥ Donar"
-              message="Las donaciones estarán disponibles próximamente. ¡Gracias por el apoyo!"
-              href={process.env.DONATE_URL}
-            />
+            <a href="/" className="site-title">
+              BOE <span>Inspector</span>
+            </a>
+            {/* Aviso obligatorio: transparencia IA + no oficialidad (LEGAL.md §5.2) */}
+            <p className="site-disclaimer">
+              Proyecto independiente y gratuito. Los resúmenes los genera una IA y no sustituyen al
+              texto oficial del BOE.
+            </p>
           </div>
           <div className="flag-ribbon" aria-hidden="true" />
         </header>
