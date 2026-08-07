@@ -114,6 +114,14 @@ a {
   max-width: 56rem;
   margin: 0 auto;
   padding: 1.2rem 1rem 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-brand {
+  min-width: 0;
 }
 
 .site-title {
@@ -133,6 +141,34 @@ a {
   color: var(--muted);
   font-size: 0.82rem;
   margin: 0.4rem 0 0;
+}
+
+/* Donar: el único botón cálido de la página, para que destaque sobre el
+   dorado sin competir con él. `flex-shrink: 0` evita que el disclaimer,
+   que sí puede encogerse, lo aplaste en pantallas estrechas. */
+.btn-donate {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 0.5rem 1.05rem;
+  border: 1px solid #d8646d;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #c2323d, #8f1b24);
+  color: #fff2ea;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(179, 34, 45, 0.32);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.btn-donate:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(179, 34, 45, 0.45);
 }
 
 /* Cinta con los colores de la bandera, como la del emblema */
@@ -196,6 +232,202 @@ a {
   color: var(--muted);
   font-size: clamp(0.88rem, 2.4vw, 1rem);
   max-width: 38rem;
+}
+
+/* ── Buscador ──────────────────────────────────────────────────── */
+
+/* Panel de archivo: mismo material que las fichas, pero sin la pestaña
+   dorada del borde izquierdo, que aquí significa "esto es un caso". */
+.filters {
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 0.9rem;
+  margin: 0 0 1.6rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.filter-row + .filter-row {
+  margin-top: 0.85rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field > span,
+.field > legend {
+  padding: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-warm);
+}
+
+/* El buscador se queda con todo el ancho sobrante de su fila. */
+.field-search {
+  flex: 1 1 16rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(10, 17, 31, 0.75);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.field input::placeholder {
+  color: var(--muted);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+/* El icono nativo del selector de fecha es negro sobre fondo oscuro. */
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.75) sepia(0.4) saturate(3) hue-rotate(5deg);
+  cursor: pointer;
+}
+
+.impact-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(10, 17, 31, 0.75);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 0.16s ease,
+    border-color 0.16s ease,
+    background 0.16s ease;
+}
+
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--gold-dim);
+}
+
+/* El chip activo toma el color de su propio nivel: el mismo código
+   cromático que las barras de impacto, para que se lean como lo mismo. */
+.chip.on {
+  color: #0a111f;
+  font-weight: 700;
+}
+
+.chip-1.on { background: var(--gold-bright); border-color: var(--gold-bright); }
+.chip-2.on { background: #b6cf80; border-color: #b6cf80; }
+.chip-3.on { background: var(--yellow); border-color: var(--yellow); }
+.chip-4.on { background: #eda76e; border-color: #eda76e; }
+.chip-5.on { background: #ef7e77; border-color: #ef7e77; }
+
+.filter-summary {
+  margin: 0.9rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.filter-summary strong {
+  color: var(--gold-bright);
+}
+
+.link-reset {
+  margin-left: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold-bright);
+  font: inherit;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Descargar: secundario a propósito, no compite con "Donar" ni con los
+   enlaces al texto oficial, que son lo importante de la página. */
+.btn-download {
+  flex-shrink: 0;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  background: rgba(201, 168, 106, 0.1);
+  color: var(--gold-bright);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.btn-download:hover {
+  background: rgba(201, 168, 106, 0.2);
+  border-color: var(--gold);
+}
+
+/* Aviso flotante de "todavía no disponible". Fijo abajo y centrado para que
+   se vea igual venga del botón de la cabecera o del de los filtros. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 10;
+  transform: translateX(-50%);
+  max-width: min(28rem, calc(100vw - 2rem));
+  padding: 0.75rem 1.1rem;
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px;
+  background: #16263f;
+  color: var(--ink);
+  font-size: 0.88rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: toast-in 0.22s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
 }
 
 /* Separador de día, estilo pestaña de expediente */
@@ -583,5 +815,53 @@ a {
 
   .hero-caption {
     padding: 0.8rem 1rem 0.9rem;
+  }
+
+  /* El "Donar" sigue arriba a la derecha, junto al título; el disclaimer
+     —que es largo— baja a una fila propia en vez de estrujar al botón. */
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.55rem 0.8rem;
+  }
+
+  .header-brand {
+    display: contents;
+  }
+
+  .site-title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .btn-donate {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .site-disclaimer {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 0;
+  }
+
+  /* Descargar pasa a ocupar su propia línea: en 375 px no cabe al lado
+     del buscador sin dejar la caja de texto inservible. */
+  .btn-download {
+    width: 100%;
+  }
+
+  .field-date {
+    flex: 1 1 8rem;
+  }
+
+  .field-impact {
+    flex: 1 1 100%;
+  }
+
+  .impact-filter .chip {
+    flex: 1 1 auto;
+    text-align: center;
   }
 }

@@ -17,3 +17,4 @@ img_capitanBoe.png
 # Documento de apoyo para presentaciones (no forma parte del servicio)
 presentacion.html
 arquitectura.html
+*.tsbuildinfo

@@ -1,6 +1,5 @@
-import { ImpactMeter } from "@/components/ImpactMeter";
+import { EntryBrowser } from "@/components/EntryBrowser";
 import { fetchDays } from "@/lib/api";
-import { formatDate } from "@/lib/format";
 
 export default async function HomePage() {
   const days = await fetchDays();
@@ -25,37 +24,14 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Los datos se piden en el servidor y el buscador vive en el cliente:
+          la portada sigue llegando renderizada, con contenido para Google. */}
       {!days || days.length === 0 ? (
         <p className="empty-state">
           Todavía no hay boletines procesados. El servicio ingiere el BOE cada mañana (L–S).
         </p>
       ) : (
-        days.map((day) => (
-          <section key={day.date}>
-            <h2 className="day-heading">BOE del {formatDate(day.date)}</h2>
-            {day.entries.map((entry) => (
-              <article key={entry.id} className="entry-card">
-                <div className="entry-head">
-                  <p className="case-label">Expediente {entry.id}</p>
-                  {entry.impact !== null && <ImpactMeter impact={entry.impact} />}
-                </div>
-                {/* El titular es el título llano de la IA; si aún no existe,
-                    se cae al oficial para no dejar la ficha sin encabezado. */}
-                <h3 className="entry-title">
-                  <a href={`/d/${entry.id}`}>{entry.plainTitle ?? entry.title}</a>
-                </h3>
-                <p className="entry-department">{entry.department}</p>
-                {entry.shortPhrase ? (
-                  <p className="entry-phrase">{entry.shortPhrase}</p>
-                ) : (
-                  <p className="entry-phrase">
-                    <span className="badge-pending">Resumen en curso</span>
-                  </p>
-                )}
-              </article>
-            ))}
-          </section>
-        ))
+        <EntryBrowser days={days} />
       )}
     </>
   );
