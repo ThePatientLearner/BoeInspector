@@ -1,5 +1,6 @@
 import { Countdown } from "@/components/Countdown";
 import { EntryBrowser } from "@/components/EntryBrowser";
+import { HeroVideo } from "@/components/HeroVideo";
 import { NotifyButton } from "@/components/NotifyButton";
 import { fetchDays } from "@/lib/api";
 
@@ -9,14 +10,9 @@ export default async function HomePage() {
   return (
     <>
       <section className="hero">
-        {/* La imagen vive en public/ y pesa ~380 KB; el degradado del CSS la
+        {/* Vídeo en bucle (~900 KB) con el emblema; el degradado del CSS lo
             funde con el fondo para que el titular sea legible encima. */}
-        <img
-          src="/emblema.jpg"
-          alt="Emblema de BOE Inspector: figura dorada con lupa y pluma sobre fondo azul marino"
-          width={1920}
-          height={1047}
-        />
+        <HeroVideo />
         {/* Cuenta atrás a la izquierda del emblema, simétrica al botón de
             la derecha. En móvil pasa a quedar debajo del caption (ver CSS). */}
         <Countdown />

@@ -1,6 +1,6 @@
 /*
  * BOE Inspector — tema "sala de investigación".
- * Paleta tomada del emblema (public/emblema.jpg): azul marino profundo,
+ * Paleta tomada del emblema (public/emblema-poster.jpg): azul marino profundo,
  * dorado metálico y los colores de la bandera como acento puntual.
  * Sin fuentes ni recursos externos: todo carga de local.
  */
@@ -390,11 +390,15 @@ a {
   margin: 0.4rem 0 2rem;
 }
 
-.hero img {
+.hero-video {
   display: block;
   width: 100%;
   height: clamp(220px, 42vw, 430px);
   object-fit: cover;
+  /* El póster se escala igual que el vídeo: sin esto, mientras carga se ve
+     la imagen deformada y salta al colocarse el primer fotograma. */
+  object-position: center;
+  background: var(--panel);
 }
 
 /* Degradado para fundir la foto con el fondo y dar sitio al titular */
@@ -1301,7 +1305,7 @@ a {
 @media (max-width: 640px) {
   /* En móvil el titular ya no se superpone al emblema (chocaba con la zona
      brillante del centro): pasa a un bloque propio bajo la imagen. */
-  .hero img {
+  .hero-video {
     height: 210px;
   }
 
